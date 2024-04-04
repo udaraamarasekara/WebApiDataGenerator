@@ -11,8 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "passport": "^0.7.0"
+    "basic-auth": "^2.0.1",
+    "express": "^4.19.2"
   }
 }
