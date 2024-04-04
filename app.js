@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 var corsOptions = {
-    origin: 'http://localhost:8080',
+    origin: ' https://backend-web-api-75f83f1efeee.herokuapp.com/ ',
     optionsSuccessStatus: 200 ,
     methods: "GET"
 }
