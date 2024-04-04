@@ -41,7 +41,7 @@ function createValues()
 createValues()
 setInterval(createValues, 5000*60);
 
-app.get('/', (req, res) => {
+app.get('/',cors(), (req, res) => {
     res.json({
      globalObj
     });
