@@ -3,7 +3,7 @@ const app = express();
 const basicAuth = require('basic-auth')
 
  globalObj = {}
- var districts = ['Colombo','Kandy','Kalutara','Matale','Gampaha','Nuwara Eliya','Galle','Matara','Habmanthota','jaffna','Kilinochchi','Manner','Vavuniya','Mullaitivu','Batticaloa','Ampara','Trincomalee','Kurunagala','puththalam','Anuradhapura','Polonnaruwa','Badulla','Monaragala','Rathnapura','Kegalle']
+ var districts = ['Colombo','Kandy','Kalutara','Matale','Gampaha','Nuwara Eliya','Galle','Matara','Habmanthota','Jaffna','Kilinochchi','Manner','Vavuniya','Mullaitivu','Batticaloa','Ampara','Trincomalee','Kurunagala','puththalam','Anuradhapura','Polonnaruwa','Badulla','Monaragala','Rathnapura','Kegalle']
 
 const maxTemperature = 40.00; 
 const minTemperature = -10.00;
