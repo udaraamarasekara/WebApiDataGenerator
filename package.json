@@ -9,9 +9,9 @@
   },
   "keywords": [],
   "author": "",
+  "type": "module",
   "license": "ISC",
   "dependencies": {
-    "basic-auth": "^2.0.1",
-    "express": "^4.19.2"
+    "axios": "^1.7.5"
   }
 }

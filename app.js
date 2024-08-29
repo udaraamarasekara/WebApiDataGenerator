@@ -1,57 +1,105 @@
-const express = require('express');
-const app = express();
-const basicAuth = require('basic-auth')
+import trains from './Trains.js';
+import stations from './Stations.js';
+import axios from 'axios'
 
- globalObj = {}
- var districts = ['Colombo','Kandy','Kalutara','Matale','Gampaha','Nuwara Eliya','Galle','Matara','Hambanthota','Jaffna','Kilinochchi','Manner','Vavuniya','Mullaitivu','Batticaloa','Ampara','Trincomalee','Kurunagala','puththalam','Anuradhapura','Polonnaruwa','Badulla','Monaragala','Rathnapura','Kegalle']
 
-const maxTemperature = 40.00; 
-const minTemperature = -10.00;
+// Example usage
 
-const minHumidity = 0.00; 
-const maxHumidity = 1.00;
-
-const minAirPressure = 900.00; 
-const maxAirPressure = 1100.00;
-
-const USERNAME = "backenduser";
-const PASSWORD = "backendpass";
-const auth = (req, res, next) => {
-  const credentials = basicAuth(req);
-   console.log(credentials)
-   if (!credentials || credentials.name !== USERNAME || credentials.pass !== PASSWORD) {
-    res.set('WWW-Authenticate', 'Basic realm="Authorization Required"');
-      return res.status(401).send('Unauthorized');
-  }
-
-  return next();
-};
-app.use(auth);
-function randomVal(min,max)
+function getNewLocation(current,end,movement)
 {
-  return (Math.random()*(max-min)+min).toFixed(2);
+  if(current>end)
+  {
+   if(current+movement>end)
+    {
+      return current-movement;
+    } 
+    else
+    {
+      return current +movement;
+    }
+  }
+  else if(current<=end)
+  {
+    if(current+movement>end)
+      {
+        return current-movement;
+      } 
+      else
+      {
+        return current +movement;
+      }
+  }  
+}
+
+
+
+
+const user = "user";
+const pass = "pass";
+const encodedCredentials = Buffer.from(`${user}:${pass}`).toString('base64');
+const api = axios.create({
+  //  baseURL: `https://web-api-data-generator-666d4a95c768.herokuapp.com/`,
+  baseURL:`http://localhost:3000`,
+  headers:{
+    'X-Requested-With':'XMLHttpRequest',
+    'Accept':'application/json',
+    'Authorization': `Basic ${encodedCredentials}`,
+    'Content-Type': 'application/json'
+
+  },
+  withCredentials: true,
+});
+var trainpos = [
+  {
+      "train":"ruhunu kumari",
+      "lat": "5.9496", 
+      "lng": "80.5469" , 
+  } ,
+  {
+      "train":"udarata manike",
+      "lat": "7.2906", 
+      "lng": "80.6337"
+  },
+  {
+      "train":"yal devi",
+      "lat": "9.6615", 
+      "lng": "80.0255"  
+  },
+  {
+      "train":"rajarata rajini",
+      "lat": "5.9496", 
+      "lng": "80.5469"
+  },
+
+];
+function randomVal()
+{
+  return (Math.random()*0.015).toFixed(4);
 }
 
 function createValues()
 {
- globalObj = districts.map((district)=>{
-   return {
-     district:district,
-     temperature: randomVal(minTemperature,maxTemperature),
-     humidity: randomVal(minHumidity,maxHumidity),
-     airPressure: randomVal(minAirPressure,maxAirPressure)
-   }
-  })  
+   trains.map(train=>{
+   let city2 = train.city2
+   let city2lat = stations.find(station=> station.city==city2).lat
+   let city2len = stations.find(station=>station.city==city2).lng
+   trainpos.forEach(trainloc=>
+    {
+     if(trainloc.train == train.train)
+     {
+      trainloc.lat = getNewLocation(parseFloat(trainloc.lat),parseFloat(city2lat),parseFloat(randomVal())).toFixed(4).toString()
+      trainloc.lng = getNewLocation(parseFloat(trainloc.lng),parseFloat(city2len), parseFloat(randomVal())).toFixed(4).toString()
+
+     }
+    }
+   )
+
+  })
+  api.post('/trainLocation',trainpos)
 }
 
 
 createValues()
-setInterval(createValues, 5000*60);
+setInterval(createValues, 1000*60);
 
-app.get('/', (req, res) => {
-    res.json({
-     globalObj
-    });
-});
-//app.listen(3000)
- app.listen(process.env.PORT || 3000)
+
